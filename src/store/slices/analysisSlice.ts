@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HarEntry } from '@/lib/parser/types';
+import { SemanticHarEntry } from '@/lib/parser/types';
 
 interface AnalysisState {
   isAnalyzing: boolean;
@@ -7,7 +7,7 @@ interface AnalysisState {
     progress: number;
     message: string;
   };
-  harEntries: HarEntry[];
+  harEntries: SemanticHarEntry[];
   currentPage: number;
   requestsPerPage: number;
 }
@@ -36,7 +36,7 @@ export const analysisSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
-    setHarEntries: (state, action: PayloadAction<HarEntry[]>) => {
+    setHarEntries: (state, action: PayloadAction<SemanticHarEntry[]>) => {
       state.harEntries = action.payload;
     },
   },

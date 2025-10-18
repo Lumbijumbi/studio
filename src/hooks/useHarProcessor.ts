@@ -4,7 +4,8 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/store/hooks';
 import { setAnalysisProgress, setAnalysisState, setHarEntries } from '@/store/slices/analysisSlice';
-import { ParserFactory, Parser } from '@/lib/parser/ParserFactory';
+import { ParserFactory } from '@/lib/parser/ParserFactory';
+import type { Parser } from '@/lib/parser/types';
 import { useToast } from '@/hooks/use-toast';
 import type { Workspace } from '@/store/slices/workspaceSlice';
 import type { SemanticHarEntry } from '@/lib/parser/types';
@@ -52,7 +53,7 @@ export function useHarProcessor() {
 
     try {
       const parser: Parser = ParserFactory.createParser(file);
-      const harEntries: SemanticHarEntry[] = [];
+      let harEntries: SemanticHarEntry[] = [];
 
       for await (const result of parser.parseWithProgress(file)) {
         switch (result.type) {
@@ -60,14 +61,10 @@ export function useHarProcessor() {
             const msg = `Parsing... ${result.entriesParsed || 0} entries found.`;
             onProgress(result.percent || 0, msg);
             break;
-          case 'entry':
-            if (result.data) {
-              harEntries.push(result.data);
-              dispatch(setHarEntries(harEntries)); // Update Redux store with new entries
-            }
-            break;
-          case 'done':
-            onProgress(95, `Parsing complete. Found ${result.entriesParsed} entries. Saving session...`);
+          case 'result':
+            harEntries = result.entries;
+            dispatch(setHarEntries(harEntries));
+            onProgress(95, `Parsing complete. Found ${harEntries.length} entries. Saving session...`);
             break;
           case 'error':
             throw new Error(result.message || 'An unknown parsing error occurred.');
@@ -91,8 +88,9 @@ export function useHarProcessor() {
 
       // Compress and store harEntries in sessionStorage
       try {
-        const compressedHarEntries = pako.deflate(JSON.stringify(harEntries), { to: 'string' });
-        sessionStorage.setItem(`harEntries_${gistId}`, compressedHarEntries);
+        const compressedHarEntries = pako.deflate(JSON.stringify(harEntries));
+        const base64String = btoa(String.fromCharCode(...compressedHarEntries));
+        sessionStorage.setItem(`harEntries_${gistId}`, base64String);
       } catch (e) {
         console.error('Failed to save HAR entries to session storage:', e);
         toast({
