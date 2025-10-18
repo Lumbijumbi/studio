@@ -91,8 +91,9 @@ export function useHarProcessor() {
 
       // Compress and store harEntries in sessionStorage
       try {
-        const compressedHarEntries = pako.deflate(JSON.stringify(harEntries), { to: 'string' });
-        sessionStorage.setItem(`harEntries_${gistId}`, compressedHarEntries);
+        const compressedHarEntries = pako.deflate(JSON.stringify(harEntries));
+        const base64Compressed = btoa(String.fromCharCode(...compressedHarEntries));
+        sessionStorage.setItem(`harEntries_${gistId}`, base64Compressed);
       } catch (e) {
         console.error('Failed to save HAR entries to session storage:', e);
         toast({
