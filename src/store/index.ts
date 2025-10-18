@@ -9,13 +9,31 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage'
 
 import workspaceReducer from './slices/workspaceSlice';
 import analysisReducer from './slices/analysisSlice';
 import filterReducer from '@/lib/filter/filterSlice';
 import uiReducer from './slices/uiSlice';
 import generatorReducer from './slices/generatorSlice';
+
+// Create a noop storage for server-side rendering
+const createNoopStorage = () => {
+  return {
+    getItem(_key: string) {
+      return Promise.resolve(null);
+    },
+    setItem(_key: string, value: any) {
+      return Promise.resolve(value);
+    },
+    removeItem(_key: string) {
+      return Promise.resolve();
+    },
+  };
+};
+
+// Use localStorage on client, noop on server
+const storage = typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage();
 
 const persistConfig = {
   key: 'root',
