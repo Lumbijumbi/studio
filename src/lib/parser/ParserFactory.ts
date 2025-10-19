@@ -5,6 +5,8 @@ import { CharlesSessionParser } from './CharlesSessionParser';
 import { AutoDetectParser } from './AutoDetectParser';
 import type { Parser } from './types';
 
+export type { Parser } from './types';
+
 export class ParserFactory {
   static createParser(file: File, config?: any): Parser {
     const extension = file.name.split('.').pop()?.toLowerCase();

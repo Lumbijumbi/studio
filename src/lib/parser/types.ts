@@ -87,6 +87,8 @@ export interface ValidationError {
 
 export type ParseProgress =
   | { type: 'progress'; percent: number, entriesParsed: number }
+  | { type: 'entry'; data: SemanticHarEntry, entriesParsed: number }
+  | { type: 'done'; entriesParsed: number }
   | { type: 'result'; entries: SemanticHarEntry[] }
   | { type: 'error'; message: string };
 

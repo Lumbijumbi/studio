@@ -13,7 +13,7 @@ export class HarStreamingParser implements Parser {
   private validator: HarValidator;
   private entriesCount: number = 0;
   private config: Required<ParserConfig>;
-  private parseQueue: Queue<() => Promise<void>>;
+  private parseQueue: Queue<void>;
 
   constructor(config: ParserConfig = {}) {
     this.config = {
@@ -101,9 +101,9 @@ export class HarStreamingParser implements Parser {
 
   private transformEntry(entry: any): SemanticHarEntry {
     if (this.config.validateSchema) {
-      const { error } = this.validator.validate(entry);
-      if (error) {
-        throw new Error(`Invalid HAR entry schema: ${error.message}`);
+      const { isValid, errors } = this.validator.validate(entry);
+      if (!isValid && errors.length > 0) {
+        throw new Error(`Invalid HAR entry schema: ${errors[0].message}`);
       }
     }
 
