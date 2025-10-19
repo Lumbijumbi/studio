@@ -1,51 +1,47 @@
-import { Queue as QueueImpl } from 'queue-typescript';
-
-export interface QueueOptions {
+export type QueueOptions = {
   concurrency?: number;
-}
+};
 
-export class Queue<T = void> {
-  private queue: QueueImpl<() => Promise<T>>;
+type TaskRunner = () => Promise<void>;
+
+export class Queue {
   private concurrency: number;
-  private running: number = 0;
+  private running = 0;
+  private waiting: TaskRunner[] = [];
 
   constructor(options: QueueOptions = {}) {
-    this.concurrency = options.concurrency || 1;
-    this.queue = new QueueImpl<() => Promise<T>>();
+    this.concurrency = Math.max(1, options.concurrency ?? 1);
   }
 
-  async add(fn: () => Promise<T>): Promise<T> {
+  add<T>(task: () => Promise<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      const task = async () => {
+      const runner: TaskRunner = async () => {
+        this.running++;
         try {
-          const result = await fn();
+          const result = await task();
           resolve(result);
-        } catch (error) {
-          reject(error);
+        } catch (err) {
+          reject(err instanceof Error ? err : new Error(String(err)));
         } finally {
           this.running--;
-          this.processNext();
+          this.drain();
         }
       };
 
-      this.queue.enqueue(task as () => Promise<T>);
-      this.processNext();
+      this.waiting.push(runner);
+      this.drain();
     });
   }
 
-  private processNext(): void {
-    if (this.running >= this.concurrency) {
-      return;
+  private drain() {
+    while (this.running < this.concurrency && this.waiting.length > 0) {
+      // Safe to use ! because we check waiting.length > 0 in the while condition
+      const next = this.waiting.shift()!;
+      void next();
     }
+  }
 
-    if (this.queue.length === 0) {
-      return;
-    }
-
-    const task = this.queue.dequeue();
-    if (task) {
-      this.running++;
-      task();
-    }
+  get size(): number {
+    return this.waiting.length + this.running;
   }
 }
