@@ -13,7 +13,7 @@ export class HarStreamingParser implements Parser {
   private validator: HarValidator;
   private entriesCount: number = 0;
   private config: Required<ParserConfig>;
-  private parseQueue: Queue<void>;
+  private parseQueue: Queue;
 
   constructor(config: ParserConfig = {}) {
     this.config = {
