@@ -93,7 +93,6 @@ class LoliCodeGenerator:
         validation = self.validator.validate(script)
         if not validation.is_valid:
             error_msg = f"Generated invalid LoliCode: {validation.errors[0]}"
-            print(f"ERROR: {error_msg}")
             raise RuntimeError(error_msg)
         
         return script

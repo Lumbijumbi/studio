@@ -50,7 +50,8 @@ class RequestBlockBuilder:
         
         # Add body if present
         if request.body:
-            body = request.body.data.replace('"', '\\"')
+            # Escape quotes in body content
+            body = request.body.data.replace('\\', '\\\\').replace('"', '\\"')
             lines.append(f'  CONTENT "{body}"')
             content_type = 'application/json' if request.body.content_type == 'json' else 'application/x-www-form-urlencoded'
             lines.append(f'  "Content-Type: {content_type}"')

@@ -47,11 +47,19 @@ class LoliCodeValidator:
         
         # Additional validation: Check for common syntax errors
         lines = script.split('\n')
+        in_parse_block = False
         for i, line in enumerate(lines, 1):
             stripped = line.strip()
             
-            # Skip lines that are part of PARSE blocks (they may have regex patterns)
-            if 'PARSE' in line or 'REGEX' in line or 'JSON' in line:
+            # Track if we're in a PARSE block (these can have complex patterns)
+            if stripped.startswith('PARSE'):
+                in_parse_block = True
+                continue
+            elif in_parse_block and (stripped.startswith('KEYCHECK') or stripped.startswith('REQUEST') or stripped.startswith('FUNCTION')):
+                in_parse_block = False
+            
+            # Skip validation for PARSE blocks
+            if in_parse_block:
                 continue
             
             # Check for unmatched quotes (but skip CONTENT lines which may have escaped quotes)
