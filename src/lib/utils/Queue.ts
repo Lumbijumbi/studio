@@ -21,7 +21,7 @@ export class Queue {
           const result = await task();
           resolve(result);
         } catch (err) {
-          reject(err as Error);
+          reject(err instanceof Error ? err : new Error(String(err)));
         } finally {
           this.running--;
           this.drain();
@@ -35,6 +35,7 @@ export class Queue {
 
   private drain() {
     while (this.running < this.concurrency && this.waiting.length > 0) {
+      // Safe to use ! because we check waiting.length > 0 in the while condition
       const next = this.waiting.shift()!;
       void next();
     }
