@@ -32,9 +32,33 @@ The GUI provides:
 
 ## Installation
 
+### Quick Install (No Build Required)
 ```bash
 pip install -r requirements.txt
 ```
+
+### Build and Install as Package
+
+To build and install the package with the GUI:
+
+**Linux/macOS:**
+```bash
+./build.sh
+pip install dist/lolicode_generator-1.0.0-py3-none-any.whl
+```
+
+**Windows:**
+```cmd
+build.bat
+pip install dist\lolicode_generator-1.0.0-py3-none-any.whl
+```
+
+After installation, launch the GUI with:
+```bash
+lolicode-gui
+```
+
+See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) for detailed build information.
 
 ## Usage
 
