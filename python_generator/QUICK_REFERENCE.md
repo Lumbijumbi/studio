@@ -106,7 +106,11 @@ JSON Path:       Type: json-path, Value: $.success
 
 | Issue | Solution |
 |-------|----------|
-| GUI won't start | Install tkinter: `sudo apt-get install python3-tk` (Linux) |
+| GUI won't start | Install tkinter for your system: |
+|                 | Ubuntu/Debian: `sudo apt-get install python3-tk` |
+|                 | Fedora/RHEL: `sudo dnf install python3-tkinter` |
+|                 | Arch Linux: `sudo pacman -S tk` |
+|                 | macOS/Windows: tkinter included with Python |
 | Can't load HAR | Ensure valid JSON format |
 | Preview empty | Select at least one request first |
 | Script invalid | Check indices and patterns are correct |
