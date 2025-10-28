@@ -2,6 +2,25 @@
 
 A Python implementation of the LoliCode script generator for OpenBullet 2.
 
+## 🎉 NEW: Professional GUI Available!
+
+**Now with a comprehensive graphical user interface!** See [GUI_README.md](GUI_README.md) for details.
+
+### Quick Start with GUI
+
+```bash
+python gui_app.py
+# Or use the launcher scripts: ./launch_gui.sh (Linux/macOS) or launch_gui.bat (Windows)
+```
+
+The GUI provides:
+- Visual HAR file import and preview
+- Interactive request selection with checkboxes
+- Easy configuration of headers, assertions, and extractions
+- Live script preview
+- One-click export and clipboard copy
+- Built-in help and examples
+
 ## Features
 
 - Generate LoliCode scripts from HAR (HTTP Archive) analysis
@@ -9,6 +28,7 @@ A Python implementation of the LoliCode script generator for OpenBullet 2.
 - Dependency-based request ordering
 - Comprehensive validation
 - Type hints and modern Python practices
+- **Professional GUI for enhanced user experience**
 
 ## Installation
 
@@ -17,6 +37,20 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+
+### GUI Mode (Recommended)
+
+```bash
+python gui_app.py
+```
+
+Or use the platform-specific launchers:
+- **Linux/macOS**: `./launch_gui.sh`
+- **Windows**: `launch_gui.bat`
+
+See [GUI_README.md](GUI_README.md) and [GUI_VISUAL_GUIDE.md](GUI_VISUAL_GUIDE.md) for complete GUI documentation.
+
+### Programmatic Mode
 
 ```python
 from src.generator.lolicode_generator import LoliCodeGenerator, LoliCodeConfig
@@ -45,6 +79,11 @@ pytest tests/
 
 ```
 python_generator/
+├── gui_app.py                 # GUI Application (NEW!)
+├── launch_gui.sh             # GUI Launcher for Linux/macOS (NEW!)
+├── launch_gui.bat            # GUI Launcher for Windows (NEW!)
+├── GUI_README.md             # GUI Documentation (NEW!)
+├── GUI_VISUAL_GUIDE.md       # GUI Visual Guide (NEW!)
 ├── src/
 │   └── generator/
 │       ├── __init__.py
@@ -58,11 +97,13 @@ python_generator/
 │       └── validators/
 │           ├── __init__.py
 │           └── lolicode_validator.py
-└── tests/
-    ├── __init__.py
-    ├── test_lolicode_generator.py
-    ├── test_request_block_builder.py
-    ├── test_keycheck_block_builder.py
-    ├── test_parse_block_builder.py
-    └── test_lolicode_validator.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_lolicode_generator.py
+│   ├── test_request_block_builder.py
+│   ├── test_keycheck_block_builder.py
+│   ├── test_parse_block_builder.py
+│   └── test_lolicode_validator.py
+└── examples/
+    └── example_usage.py
 ```
