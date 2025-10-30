@@ -5,10 +5,11 @@ from setuptools import setup, find_packages
 setup(
     name='lolicode-generator',
     version='1.0.0',
-    description='Python implementation of LoliCode script generator for OpenBullet 2',
+    description='Python implementation of LoliCode script generator for OpenBullet 2 with GUI',
     author='HAR2LoliCode',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
+    scripts=['gui_app.py'],
     python_requires='>=3.8',
     install_requires=[],
     extras_require={
@@ -16,6 +17,11 @@ setup(
             'pytest>=8.0.0',
             'pytest-asyncio>=0.23.0',
         ]
+    },
+    entry_points={
+        'console_scripts': [
+            'lolicode-gui=gui_app:main',
+        ],
     },
     classifiers=[
         'Development Status :: 4 - Beta',

@@ -1,0 +1,29 @@
+# Include documentation files
+include README.md
+include GUI_README.md
+include GUI_VISUAL_GUIDE.md
+include QUICK_REFERENCE.md
+include FEATURES_SUMMARY.md
+include IMPLEMENTATION_SUMMARY.md
+include COMPARISON.md
+include SUMMARY.md
+include PYTHON_GENERATOR.md
+
+# Include configuration files
+include requirements.txt
+include pytest.ini
+
+# Include launcher scripts
+include launch_gui.sh
+include launch_gui.bat
+
+# Include examples
+recursive-include examples *.py
+
+# Include tests
+recursive-include tests *.py
+
+# Exclude compiled Python files
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.pyo
